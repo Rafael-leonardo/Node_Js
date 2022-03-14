@@ -10,8 +10,6 @@ const sequelize = new Sequelize({
     storage: "path/to/teste.db"
 })
 
-app.set('view engine', 'ejs');
-
 const User = sequelize.define("User", {
     id: {type: DataTypes.INTEGER,
         autoIncrement: true,
