@@ -4,27 +4,28 @@ const path = require("path")
 const router = express.Router()
 
 const { Sequelize, Op, Model, DataTypes } = require("@sequelize/core")
+const req = require("express/lib/request")
 
-const sequelize = new Sequelize({
+const db = new Sequelize({
     dialect: "sqlite",
     storage: "path/to/teste.db"
 })
 
-const User = sequelize.define("User", {
+const User = db.define("User", {
     id: {type: DataTypes.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
     },
-    name: {
+    user_name: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    idade: {
+    user_age: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    email: {
+    user_email: {
         type: DataTypes.STRING
     }
 })
@@ -38,19 +39,20 @@ try {
     console.error('Unable to connect to the database:', error);
   }
 
-router.get('/', function(req, res){
-    var name = req.body.name
-    var idade = req.body.idade
-    var email = req.body.email
+router.all('/')
+    .get('/', (req, res) => {
+        res.sendFile(path.join(__dirname+'/index.html'))
+    })
+    .post('/', (req, res) => {
+    const { user_name } = req.body
+    const { user_age } = req.body
+    const { user_email } = req.body
 
-    var newUser = User.build({ name: name, idade: idade, email: email})   
+    var newUser = User.build(`{user_name:${user_name}, user_age:${user_age}, user_email:${user_email}}`)
     newUser.save()
-    res.sendFile(path.join(__dirname+'/index.html'))
 })
 
 
-
-app.use('/', router)
-console.log("servidor rodando")
+app.use("/", router)
 app.listen(process.env.port || 3000)
 console.log("servidor rodando")
