@@ -40,10 +40,10 @@ try {
   }
 
 router.all('/')
-    .get('/', (req, res) => {
+    .get((req, res) => {
         res.sendFile(path.join(__dirname+'/index.html'))
     })
-    .post('/', (req, res) => {
+    .post((req, res) => {
     const { user_name } = req.body
     const { user_age } = req.body
     const { user_email } = req.body
